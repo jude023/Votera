@@ -1,0 +1,42 @@
+{
+  "rules": {
+    "usernames": {
+      "$n": { ".read": true, ".write": "auth != null && ((!data.exists() && newData.child('uid').val() == auth.uid) || data.child('uid').val() == auth.uid)" }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('users/' + auth.uid + '/role').val() == 'superadmin')",
+        ".write": "auth != null && auth.uid == $uid",
+        "role": {
+          ".validate": "(!data.exists() && newData.val() == 'user') || newData.val() == data.val() || root.child('users/' + auth.uid + '/role').val() == 'superadmin'"
+        }
+      }
+    },
+    "polls": {
+      ".read": true,
+      "$p": {
+        ".write": "auth != null && root.child('users/' + auth.uid + '/role').val() == 'superadmin'",
+        "items": {
+          "$n": {
+            "votes": { ".write": "auth != null && newData.val() == (data.val() || 0) + 1" }
+          }
+        }
+      }
+    },
+    "followers": { ".read": true, "$t": { "$u": { ".write": "auth != null && auth.uid == $u" } } },
+    "following": { ".read": true, "$u": { "$t": { ".write": "auth != null && auth.uid == $u" } } },
+    "episodes": {
+      ".read": true,
+      "$e": { ".write": "auth != null && root.child('users/' + auth.uid + '/role').val() == 'superadmin'" }
+    },
+    "posts": {
+      ".read": true,
+      "$id": {
+        "likes": { "$u": { ".write": "auth != null && auth.uid == $u" } },
+        "downs": { "$u": { ".write": "auth != null && auth.uid == $u" } },
+        "comments": { "$c": { ".write": "auth != null && ((!data.exists() && newData.child('uid').val() == auth.uid) || data.child('uid').val() == auth.uid)" } },
+        ".write": "auth != null && ((!data.exists() && newData.child('uid').val() == auth.uid) || data.child('uid').val() == auth.uid)"
+      }
+    }
+  }
+}

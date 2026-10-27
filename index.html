@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Votera - PBB Voting</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c3aed'/%3E%3Cstop offset='1' stop-color='%23d946ef'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 10l5.5 16.5L54 32l-16.5 5.5L32 54l-5.5-16.5L10 32l16.5-5.5z' fill='white'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05050f;--card:#0e0e1b;--line:#1c1c2e;--in:#1a1a26;--g:linear-gradient(90deg,#7c3aed,#d946ef);--lime:#d4f53c;--mut:#8b8ba3}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:#fff;font:500 13px Barlow,sans-serif;min-height:100vh}
+.dots{position:fixed;pointer-events:none;width:560px;height:280px;background:radial-gradient(#8b5cf6 1px,transparent 1.6px) 0 0/8px 8px;opacity:.45;-webkit-mask:radial-gradient(ellipse at var(--p),#000,transparent 70%);mask:radial-gradient(ellipse at var(--p),#000,transparent 70%)}
+.tl{top:0;left:0;--p:0 0}.bm{bottom:0;left:50%;margin-left:-280px;--p:50% 100%}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;cursor:pointer}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 20px;background:#05050fcc;backdrop-filter:blur(8px)}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px}
+nav{display:flex;gap:2px;background:var(--card);border:1px solid var(--line);padding:3px;border-radius:999px}
+nav a{padding:7px 13px;border-radius:999px;color:var(--mut);font-size:12px;font-weight:600}nav a.on{background:#25253a;color:#fff}
+.r{display:flex;align-items:center;gap:8px}
+.btn{border:0;border-radius:999px;padding:11px 20px;font-weight:700;font-size:12px;background:var(--g);box-shadow:0 6px 24px #a855f755;color:#fff}
+.btn.dk{background:var(--in);box-shadow:none}.btn.sm{padding:7px 14px}.btn.red{background:#3a1420;color:#fb7185;box-shadow:none}.btn:disabled{opacity:.4}
+.pillb{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-weight:700}
+.av{width:30px;height:30px;border-radius:50%;border:1px solid #8b5cf6;object-fit:cover;background:#2a1a4a}
+.in{width:100%;background:var(--in);border:1px solid transparent;border-radius:999px;padding:12px 16px;color:#fff;font:inherit;outline:0}.in:focus{border-color:#a855f7}
+textarea.in{border-radius:16px;resize:none}label{display:block;font-size:11px;color:var(--mut);font-weight:700;margin:12px 0 5px}
+.wrap{max-width:1040px;margin:0 auto;padding:18px 16px 60px;position:relative}
+.auth{max-width:340px;margin:12vh auto;padding:0 16px;position:relative}
+.ctr{text-align:center}h1{font-size:34px;font-weight:800;line-height:1.05;letter-spacing:-.5px}.au h1,.auth h1{font-size:26px}
+h2{font-size:20px;font-weight:800;margin-bottom:10px}.mut{color:var(--mut)}.hand{font-family:Caveat,cursive;color:#c084fc;font-size:24px;line-height:1}
+.lime{font-family:Caveat,cursive;color:var(--lime);font-size:1.15em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}
+.stat{position:relative;max-width:280px;margin:26px auto 12px;padding:22px 16px 14px;border-radius:22px;border-color:#9fc23a66;background:linear-gradient(160deg,#2b2d1c 0%,#14141f 45%,#0b1f26 100%);box-shadow:0 10px 40px #0008}.stat>b{display:block;font-size:40px;line-height:1.1;letter-spacing:-1px}.stat .pill{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--lime);color:#000;padding:4px 12px;white-space:nowrap}.stat small{font-size:10px;font-weight:700}.dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#34d399;margin:0 6px 1px 0}.stat .w{color:#fff}.stk{display:flex;justify-content:center;align-items:center;margin:12px 0 8px;padding-left:8px}.stk .st{width:28px;height:28px}.more{background:#0d0d18;border-radius:99px;padding:6px 9px;font-size:10px;font-weight:700;margin-left:4px}
+.pill{background:#1c2d12;color:var(--lime);border-radius:999px;padding:3px 10px;font-size:10px;font-weight:700}
+.cols{display:grid;grid-template-columns:1fr 260px;gap:20px;margin-top:26px}
+.row{display:flex;align-items:center;gap:10px}.sp{justify-content:space-between}
+.lnk{display:flex;align-items:center;gap:10px;padding:8px;border-radius:14px;background:var(--card);border:1px solid var(--line);margin-bottom:8px}
+.lnk img,.th{width:34px;height:34px;border-radius:10px;object-fit:cover;background:#222}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.nc{position:relative;border-radius:16px;overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.nc img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}.nc .b{padding:10px}.nc .rk{position:absolute;top:8px;left:8px;background:#f5b301;color:#000;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:11px}
+.nc .btn{width:100%;margin-top:8px}.nc .b .row .btn.red{width:auto;margin:0;flex:none}
+.bar{height:5px;border-radius:9px;background:#1c1c2e;margin-top:5px}.bar i{display:block;height:100%;border-radius:9px;background:var(--g)}
+.lb{display:grid;grid-template-columns:26px 34px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.modal{position:fixed;inset:0;background:#000b;display:grid;place-items:center;z-index:50;padding:16px}.modal .card{width:100%;max-width:440px}
+#toast{position:fixed;bottom:20px;right:20px;background:#161626;border:1px solid #a855f7;padding:10px 16px;border-radius:14px;opacity:0;transition:.3s;pointer-events:none;z-index:99}#toast.on{opacity:1}
+.soc{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.soc .btn{background:var(--in);box-shadow:none}
+.adm{border-color:#f59e0b66}.hr{border-top:1px solid var(--line);margin:12px 0}
+.st{margin-left:-8px;width:26px;height:26px}.fl{color:#c084fc;font-size:11px;cursor:pointer;margin-left:4px}
+.emb{display:block;border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#0a0a16}.mini{display:flex;gap:10px;align-items:center;margin-top:8px}.mini img{width:80px;aspect-ratio:3/4;object-fit:cover;border-radius:10px}
+.chip{background:var(--in);border:0;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:700}.soc4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.soc4 .btn{padding:14px 4px;font-size:11px}.vt{display:inline-flex;align-items:center;gap:6px;margin-right:6px}a.chip{display:inline-block}.chip.dn{background:#be185d}.um{position:absolute;right:0;top:42px;width:250px;background:#12121e;border:1px solid var(--line);border-radius:18px;padding:10px;display:none;z-index:40;box-shadow:0 20px 50px #000a}.um.on{display:block}.um>a,.um .mi{display:block;width:100%;text-align:left;background:none;border:0;padding:9px 8px;border-radius:10px;color:#ddd;font-size:12px;font-weight:600}.um>a:hover,.um .mi:hover{background:#1f1f2e}.vid{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000}.vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.seg.p button.on{background:var(--g);color:#fff}.seg.p button{padding:9px 22px}.tkg{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;max-width:760px;margin:0 auto}@media(max-width:700px){.tkg{grid-template-columns:1fr}.tkg>div{grid-column:auto!important}}.chip.on{background:#7c3aed}.chip+.chip{margin-left:6px}
+.seg{display:flex;background:var(--card);border-radius:999px;padding:3px}.seg button{border:0;background:none;padding:6px 14px;border-radius:999px;font-weight:700;font-size:11px;color:var(--mut)}.seg button.on{background:var(--lime);color:#000}
+.wrap.wide{max-width:1320px}.wide .cols{grid-template-columns:1fr minmax(0,480px) 1fr}.wide aside{max-width:300px;margin-left:auto;width:100%}
+@media(max-width:800px){.wide .cols{grid-template-columns:1fr}.wide .cols>div:empty{display:none}.wide aside{max-width:none}.cols{grid-template-columns:1fr}nav a{padding:6px 8px}}
+</style></head>
+<body><div class="dots tl"></div><div class="dots bm"></div>
+<header id="top"></header><main id="app"></main><div id="modal"></div><div id="toast"></div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,GoogleAuthProvider,FacebookAuthProvider,OAuthProvider,signInWithPopup,sendSignInLinkToEmail,linkWithCredential,EmailAuthProvider,isSignInWithEmailLink,signInWithEmailLink} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import {getDatabase,ref,get,set,update,push,remove,onValue,runTransaction} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const app=initializeApp({apiKey:"AIzaSyAwJ1Pjw7RlIVxGpFqvbbQ8nsuh4jn6ndg",authDomain:"pbb-voting.firebaseapp.com",databaseURL:"https://pbb-voting-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"pbb-voting",storageBucket:"pbb-voting.firebasestorage.app",messagingSenderId:"974959562984",appId:"1:974959562984:web:347e1c85518ebaecfd395d"});
+const auth=getAuth(app),db=getDatabase(app);
+const START=200,POST_COST=5,ADS_URL='https://beta.publishers.adsterra.com/websites',CONTACT='mailto:malainejude123@gmail.com';
+const S={user:null,me:null,polls:{},posts:{},pt:'quote',pending:false,off:null,tab:'for',menuOn:false,tk:'free',eps:{},flw:{},fng:{}};
+const $=s=>document.querySelector(s),num=n=>(n||0).toLocaleString();
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const avatar=n=>`https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(n)}`;
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600)};
+const dname=u=>u.displayName||u.username;
+const isAdmin=()=>S.me?.role==='superadmin';
+const R=()=>location.hash.slice(2).split('/');
+const star='<svg width="26" height="26" viewBox="0 0 64 64"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#d946ef"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#lg)"/><path d="M32 10l5.5 16.5L54 32l-16.5 5.5L32 54l-5.5-16.5L10 32l16.5-5.5z" fill="#fff"/></svg>';
+
+/* ---------- data helpers ---------- */
+const noms=p=>Object.entries(p.items||{}).filter(([,v])=>v).map(([k,v])=>({...v,key:k})).sort((a,b)=>(b.votes||0)-(a.votes||0));
+const pl=()=>Object.entries(S.polls).map(([id,p])=>{const n=noms(p);return {...p,id,n,total:n.reduce((a,x)=>a+(x.votes||0),0)}}).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+const isOpen=p=>p.status!=='closed';
+const img2data=f=>new Promise(res=>{const i=new Image();i.onload=()=>{const s=Math.min(1,480/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*s;c.height=i.height*s;c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.8))};i.src=URL.createObjectURL(f)});
+
+/* ---------- views ---------- */
+function top(){
+  const r=R()[0]||'home',L=(h,t)=>`<a href="#/${h}" class="${r===h?'on':''}">${t}</a>`;
+  $('#top').innerHTML=`<a href="#/" class="logo">${star} Votera</a>`+(S.user&&S.me?`
+  <nav>${L('','Community Posts').replace('class=""','class="'+(r==='home'||r===''?'on':'')+'"')}${L('tokens','Get Tokens')}${L('standings','Standings')}${L('replays','Replays')}${isAdmin()?L('admin','Admin'):''}</nav>
+  <div class="r"><button class="btn sm" onclick="A.openPost()">+ Post</button><span class="pillb">${num(S.me.tokens)} ✦</span>
+  <div style="position:relative"><img class="av" src="${esc(S.me.avatar)}" onclick="A.menu(event)" style="cursor:pointer">
+  <div id="um" class="um ${S.menuOn?'on':''}"><a href="#/profile" class="row" style="padding:6px"><img class="av" style="width:38px;height:38px" src="${esc(S.me.avatar)}"><div><b>${esc(dname(S.me))}</b><div class="mut" style="font-size:11px">View profile</div></div></a>
+  <div class="card" style="margin:8px 0;padding:12px;background:#171726"><b style="font-size:20px">${num(S.me.tokens)} ✦</b><div class="mut" style="font-size:11px;margin:2px 0 10px">${num(S.me.votesCast)} votes cast</div><a class="btn" href="#/tokens" style="display:block;text-align:center">Get tokens</a></div>
+  <a href="#/profile">Profile</a><a href="#/settings">Settings</a><a href="#/transactions">Transactions</a><a href="#/tokens">Rewards</a><div class="hr" style="margin:6px 0"></div><a href="${CONTACT}">Help &amp; support</a><button class="mi" style="color:#fb7185" onclick="A.logout()">Log out</button></div></div></div>`
+  :`<a class="btn dk sm" href="${CONTACT}">Contact</a>`);
+}
+const auth_=(signup)=>`<div class="auth ctr"><h1>${signup?'Create an account':'Welcome back'}</h1>
+<p class="mut" style="margin:6px 0 14px">${signup?`Start with ${START} tokens. The username is public on your account.`:'Use a social account, email, or username.'}</p>
+<form onsubmit="A.${signup?'signup':'login'}(event)" style="text-align:left">
+${signup?'<label>Username</label><input class="in" name="u" required placeholder="Username" maxlength="20">':''}
+<label>${signup?'Email':'Email or username'}</label><input class="in" name="id" required placeholder="you@email.com">
+<label>Password</label><input class="in" name="p" type="password" required minlength="6">
+${signup?'<label>Confirm password</label><input class="in" name="p2" type="password" required>':''}
+<button class="btn" style="width:100%;margin-top:16px">${signup?'Create account':'Sign in'}</button></form>
+${signup?'':`<p class="mut" style="margin:14px 0 0;font-size:11px">Or continue with</p><div class="soc">
+<button class="btn" onclick="A.social('google')">Google</button><button class="btn" onclick="A.social('apple')">Apple</button>
+<button class="btn" onclick="A.social('facebook')">Facebook</button><button class="btn" onclick="A.magic()">Magic link</button></div>`}
+<p class="mut" style="margin-top:18px">${signup?'Have an account? <a href="#/login"><b style="color:#fff">Log in</b></a>':'New here? <a href="#/signup"><b style="color:#fff">Create account</b></a>'}</p></div>`;
+
+function pcard(p,P,det){
+  const fol=S.me.following||{},uid=S.user.uid,pp=P.find(x=>x.id===p.pollId),it=pp?.n.find(x=>x.key===p.itemKey),lk=p.likes||{},dn=p.downs||{},nc=Object.keys(p.comments||{}).length,sc=Object.keys(lk).length-Object.keys(dn).length;
+  const fb=p.uid===uid?'':`<a class="fl" onclick="A.follow('${p.uid}')">${fol[p.uid]?'Following':'Follow'}</a>`;
+  return `<div class="card" style="margin-bottom:12px"><div class="row sp"><div class="row"><a href="#/profile/${p.uid}"><img class="av" src="${esc(p.avatar)}"></a><div><a href="#/profile/${p.uid}"><b>${esc(p.username)}</b></a> ${fb}<div class="mut" style="font-size:10px">Community post · ${ago(p.timestamp)}</div></div></div><span class="hand">${pp?'item':esc(p.type)}</span></div>
+  <p style="margin:10px 0${det?'':';cursor:pointer'}" ${det?'':`onclick="location.hash='#/post/${p.id}'"`}>${esc(p.content)}</p>
+  ${pp?`<a href="#/poll/${pp.id}" class="emb"><div class="hand" style="font-size:15px">on this item</div><div class="row sp"><b>${esc(pp.title)}</b><span>→</span></div>${it?`<div class="mini"><img src="${esc(it.img)}"><div><b>${esc(it.name)}</b><div class="mut">${num(it.votes)} votes</div></div></div>`:`<div class="row" style="margin-top:8px">${pp.n.slice(0,6).map(x=>`<img class="th" src="${esc(x.img)}">`).join('')}</div>`}</a>`:''}
+  <div class="row"><span class="vt"><button class="chip ${lk[uid]?'on':''}" onclick="A.vote2('${p.id}',1)">▲</button><b>${sc}</b><button class="chip ${dn[uid]?'dn':''}" onclick="A.vote2('${p.id}',-1)">▼</button></span><a class="chip" href="#/post/${p.id}">💬 ${nc||''}</a><button class="chip" onclick="A.share('${p.id}')">Share</button></div></div>`;
+}
+function profile(id){
+  const P=pl(),me=S.user.uid;id=id||me;const own=id===me,mine=Object.entries(S.posts).map(([k,p])=>({...p,id:k})).filter(p=>p.uid===id).sort((a,b)=>b.timestamp-a.timestamp);
+  const u=own?S.me:mine[0]?{username:mine[0].username,avatar:mine[0].avatar}:null;
+  if(!u)return `<div class="wrap ctr mut">Profile not found. <a href="#/"><u>Back</u></a></div>`;
+  const fo=Object.keys(S.flw[id]||{}).length,fg=Object.keys(S.fng[id]||{}).length;
+  return `<div class="wrap"><div style="max-width:520px;margin:0 auto"><div class="row" style="gap:20px;margin:10px 0 20px"><img class="av" style="width:100px;height:100px;border-width:3px" src="${esc(u.avatar)}"><div style="flex:1"><div class="row sp"><h1 style="font-size:28px">${esc(own?dname(u):u.username)}</h1>${own?'<a class="btn dk sm" href="#/settings">Edit profile</a>':`<button class="btn sm" onclick="A.follow('${id}')">${S.me.following?.[id]?'Following':'Follow'}</button>`}</div>${own?`<div class="mut">@${esc(u.username)}</div>`:''}
+  <div class="row" style="gap:22px;margin-top:10px">${[[mine.length,'Posts'],[fo,'Followers'],[fg,'Following']].map(([n,l])=>`<div><b style="font-size:16px">${n}</b><div class="mut" style="font-size:11px">${l}</div></div>`).join('')}</div></div></div>
+  ${own?`<div class="card row" style="border-style:dashed;border-color:#7c3aed88;margin-bottom:18px;cursor:pointer" onclick="A.openPost()"><img class="av" src="${esc(u.avatar)}"><div><div class="hand">write</div><span class="mut">A quote or a poll. Tag people on the post, ${POST_COST} tokens.</span></div></div>`:''}
+  <h2>Posts</h2>${mine.map(p=>pcard(p,P)).join('')||`<div class="card ctr" style="padding:36px"><div style="font-size:26px">“</div><b>Nothing posted yet.</b><p class="mut" style="font-size:11px;margin-top:6px">Quotes and poll tags from this profile will sit here.</p></div>`}</div></div>`}
+function settings2(){
+  const m=S.me,pr=(auth.currentUser?.providerData||[]).map(x=>x.providerId),hasPw=pr.includes('password'),g=pr.includes('google.com');
+  return `<div class="wrap"><div style="max-width:560px;margin:0 auto"><h1>Settings</h1><p class="mut" style="margin:6px 0 16px">The name on this account and how you sign in. Tokens and votes stay on the pages made for them.</p>
+  <div class="card"><div class="row"><img class="av" style="width:64px;height:64px" src="${esc(m.avatar)}"><div><b>${esc(dname(m))}</b><div class="mut">${esc(m.email)}</div><b>${num(m.tokens)} ✦</b> <span class="mut">· ${num(m.votesCast)} votes</span></div></div>
+  <div class="row" style="margin-top:12px"><a class="btn dk sm" href="#/profile">View profile</a><button class="btn dk sm" onclick="A.portraits()">Select portrait</button><label class="btn sm" style="margin:0;cursor:pointer;color:#fff">Upload<input type="file" accept="image/jpeg,image/png,image/webp" hidden onchange="A.setAvatar(this)"></label></div></div>
+  <p class="mut" style="font-size:10px;margin:8px 4px">Member since ${new Date(m.createdAt||Date.now()).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})}. JPG, PNG, or WebP up to 5 MB. The photo is compressed before it is stored. <a href="#/transactions"><u>Transactions</u></a> · <a href="#/tokens"><u>Rewards</u></a></p>
+  <div class="card" style="margin-top:12px"><b>Profile</b><p class="mut">The display name is what the menu shows. The username is the handle on the account.</p><label>Display name</label><input class="in" id="sdn" value="${esc(dname(m))}" maxlength="30"><small class="mut">You can change this once every 7 days.</small><label>Username</label><input class="in" id="sun" value="${esc(m.username)}" maxlength="20"><small class="mut">3–20 letters, numbers, or underscores.</small><br><button class="btn" style="margin-top:14px" onclick="A.saveProfile()">Save profile</button></div>
+  <div class="card" style="margin-top:12px"><b>Sign in</b><p class="mut">${g?'You sign in with Google.':hasPw?'You sign in with email and password.':'You sign in with a social account.'}</p><label>Email</label><div>${esc(m.email)}</div>
+  ${hasPw?'':`<div class="hr"></div><b>Set password</b><p class="mut">This adds a password to ${esc(m.email)}. ${g?'Google still works. ':''}You can then sign in with this email.</p><label>Password</label><input class="in" id="pw1" type="password"><label>Confirm password</label><input class="in" id="pw2" type="password"><small class="mut">8 to 128 characters, with a letter and a number.</small><br><button class="btn" style="margin-top:14px" onclick="A.setPw()">Set password</button>`}</div></div></div>`}
+function txs(){const l=Object.values(S.me.tx||{}).sort((a,b)=>b.ts-a.ts).slice(0,100);
+  return `<div class="wrap"><div style="max-width:480px;margin:0 auto"><div class="hand">wallet</div><h2>Transactions</h2><div class="card">${l.map(x=>`<div class="row sp" style="padding:9px 0;border-bottom:1px solid var(--line)"><div><b>${esc(x.l)}</b><div class="mut" style="font-size:10px">${new Date(x.ts).toLocaleString()}</div></div><b style="color:${x.t>0?'var(--lime)':'#fb7185'}">${x.t>0?'+':''}${x.t} ✦</b></div>`).join('')||'<p class="mut">No transactions yet.</p>'}</div></div></div>`}
+const ytid=u=>{const m=String(u).trim().match(/(?:v=|youtu\.be\/|embed\/|shorts\/|live\/)([\w-]{11})/);return m?m[1]:/^[\w-]{11}$/.test(String(u).trim())?String(u).trim():null};
+function replays(id){
+  const E=Object.entries(S.eps).map(([k,e])=>({...e,id:k})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)),cur=E.find(e=>e.id===id),ad=isAdmin();
+  const form=ad&&!cur?`<form class="card adm" style="margin:14px 0" onsubmit="A.addEp(event)"><b>Add episode</b><div class="row" style="flex-wrap:wrap;margin-top:6px"><div style="flex:1;min-width:160px"><label>Title</label><input class="in" name="t" required placeholder="PBB Collab 3.0 Day 12"></div><div style="width:110px"><label>Label</label><input class="in" name="e" placeholder="EP 12"></div></div><label>YouTube link</label><input class="in" name="u" required placeholder="https://www.youtube.com/watch?v=..."><button class="btn" style="margin-top:12px">Add replay</button></form>`:'';
+  const card=e=>`<div class="nc"><a href="#/replays/${e.id}"><img style="aspect-ratio:16/9" src="https://img.youtube.com/vi/${esc(e.vid)}/hqdefault.jpg"><span class="rk" style="width:auto;padding:0 9px;border-radius:99px">▶ ${esc(e.ep||'Replay')}</span></a><div class="b row sp"><b>${esc(e.title)}</b>${ad?`<button class="btn red sm" onclick="A.delEp('${e.id}')">✕</button>`:''}</div></div>`;
+  const player=cur?`<a class="mut" href="#/replays">‹ All replays</a><div class="vid" style="margin:12px 0"><iframe src="https://www.youtube-nocookie.com/embed/${esc(cur.vid)}?rel=0" allow="accelerometer;autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="hand">${esc(cur.ep||'replay')}</div><h1 style="font-size:24px;margin-bottom:22px">${esc(cur.title)}</h1><h2>More episodes</h2>`:`<div class="ctr"><div class="hand">watch again</div><h1>Episode replays</h1></div>`;
+  if(id&&!cur)return `<div class="wrap ctr mut">Replay not found. <a href="#/replays"><u>Back</u></a></div>`;
+  return `<div class="wrap wide">${player}${form}<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr));margin-top:16px">${E.filter(e=>e.id!==id).map(card).join('')||'<p class="mut">No replays yet.</p>'}</div></div>`}
+function postv(id){
+  const p=S.posts[id];if(!p)return `<div class="wrap ctr mut">Post not found. <a href="#/"><u>Back</u></a></div>`;
+  const cs=Object.entries(p.comments||{}).map(([k,c])=>({...c,k})).sort((a,b)=>a.timestamp-b.timestamp);
+  return `<div class="wrap"><div style="max-width:480px;margin:0 auto"><a class="mut" href="#/">‹ Stage</a><div style="margin-top:12px">${pcard({...p,id},pl(),1)}
+  <div class="card"><div class="hand">replies</div><h2>Comments</h2><textarea class="in" id="cm" rows="3" maxlength="400" placeholder="Write a comment" oninput="document.getElementById('cc').textContent=this.value.length+'/400'"></textarea>
+  <div class="row sp" style="margin:10px 0"><small class="mut" id="cc">0/400</small><button class="btn sm" onclick="A.comment('${id}')">Comment</button></div>
+  ${cs.map(c=>`<div class="row" style="align-items:flex-start;margin-top:12px"><img class="av" src="${esc(c.avatar)}"><div><b>${esc(c.username)}</b> <span class="mut" style="font-size:10px">${ago(c.timestamp)}</span><div>${esc(c.text)}</div></div></div>`).join('')||'<p class="mut">No replies yet.</p>'}</div></div></div></div>`;
+}
+function home(){
+  const P=pl(),tot=P.reduce((a,p)=>a+p.total,0),fol=S.me.following||{},uid=S.user.uid;
+  let posts=Object.entries(S.posts).map(([id,p])=>({...p,id})).sort((a,b)=>b.timestamp-a.timestamp);
+  const by={};posts.forEach(p=>{(by[p.uid]=by[p.uid]||{n:p.username,a:p.avatar,id:p.uid,c:0}).c++});
+  const users=Object.values(by),voices=users.sort((a,b)=>b.c-a.c).slice(0,5);
+  const stack=users.slice(0,6).map(v=>`<img class="av st" src="${esc(v.a)}">`).join('');
+  const talk=P.map(p=>({p,ps:posts.filter(x=>x.pollId===p.id)})).filter(x=>x.ps.length).sort((a,b)=>b.ps.length-a.ps.length).slice(0,3);
+  const all=posts.length;if(S.tab==='following')posts=posts.filter(p=>fol[p.uid]);
+  const card=p=>pcard(p,P);
+  return `<div class="wrap wide"><div class="ctr"><div class="hand">season 2026</div><h1>What do you want<br>to vote for <span class="lime">today?</span></h1>
+  <p class="mut" style="margin:8px auto 0;max-width:460px">Official fan polls. Pick a category, spend one token, and the public tally moves with you.</p>
+  <div class="card stat"><span class="pill">${P.filter(isOpen).length} open polls</span><b>${num(tot)}</b><small class="mut"><i class="dot"></i>votes cast</small><div class="stk">${stack}${users.length>6?`<span class="more">+${users.length-6}</span>`:''}</div><small class="mut"><span class="w">${users.length}</span> posters <i class="dot" style="margin:0 6px 1px"></i> <span class="w">${all}</span> posts</small></div>
+  <div class="hand" style="font-size:20px">one token, one name.</div></div>
+  <div class="cols"><div></div><section>
+  ${talk.length?`<div class="row sp" style="margin-bottom:8px"><small><b>Talked about today</b></small><a class="btn sm" href="#/standings">All polls →</a></div><div class="row" style="margin-bottom:22px;align-items:stretch">${talk.map(({p,ps})=>`<a href="#/poll/${p.id}" class="card" style="flex:1;max-width:190px"><b>${esc(p.title)}</b><div style="margin:8px 0 2px;padding-left:8px">${[...new Set(ps.map(x=>x.avatar))].slice(0,5).map(a=>`<img class="av st" src="${esc(a)}">`).join('')}</div><small style="color:#c084fc;font-weight:700">${ps.length} posts</small></a>`).join('')}</div>`:''}
+  <div class="row sp"><h2 style="margin:0">Stage</h2><div class="seg"><button class="${S.tab==='for'?'on':''}" onclick="A.tab('for')">For you</button><button class="${S.tab==='following'?'on':''}" onclick="A.tab('following')">Following</button></div></div>
+  <div class="card row" style="border-style:dashed;border-color:#7c3aed88;margin:12px 0;cursor:pointer" onclick="A.openPost()"><img class="av" src="${esc(S.me.avatar)}"><div><div class="hand">write</div><span class="mut">A quote or a poll. Tag people on the post, ${POST_COST} tokens.</span></div></div>
+  ${posts.map(card).join('')||`<div class="card mut ctr">${S.tab==='following'?'Follow people to see their posts here.':'No posts yet.'}</div>`}
+  </section><aside><div class="row sp"><div><div class="hand">polls</div><b style="font-size:15px">Open now</b></div><a class="btn dk sm" href="#/standings">View more polls →</a></div><div style="margin-top:8px">
+  ${P.filter(isOpen).map(p=>{const t=p.n[0];return `<a class="lnk" href="#/poll/${p.id}"><img src="${esc(t?.img||avatar(p.title))}"><div style="min-width:0;flex:1"><b style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.title)}</b><span class="mut" style="font-size:10px">${esc(t?.name||'-')}</span></div><div style="text-align:right"><b>${num(p.total)}</b><div style="color:var(--lime);font-size:10px">${p.total&&t?Math.round((t.votes||0)/p.total*100):0}%</div></div></a>`}).join('')||'<p class="mut">No open polls yet.</p>'}</div>
+  ${voices.length?`<div class="card" style="margin-top:14px"><div class="hand">voices</div><b style="font-size:15px">With posts</b>${voices.map(v=>`<div class="row sp" style="margin-top:12px"><div class="row"><img class="av" src="${esc(v.a)}"><div><b>${esc(v.n)}</b><div class="mut" style="font-size:10px">${v.c} post${v.c>1?'s':''}</div></div></div>${v.id===uid?'<span class="mut" style="font-size:11px">You</span>':`<button class="btn sm" onclick="A.follow('${v.id}')">${fol[v.id]?'Following':'Follow'}</button>`}</div>`).join('')}</div>`:''}
+  <p class="mut" style="font-size:10px;margin-top:16px;line-height:1.8">© 2026 Votera · <a href="#/terms">Terms</a> · <a href="#/privacy">Privacy Policy</a> · <a href="#/disclaimer">Disclaimer</a><br><a href="${CONTACT}">Report a problem</a></p></aside></div></div>`;
+}
+const ago=t=>{const s=(Date.now()-t)/1000;return s<60?'just now':s<3600?Math.floor(s/60)+'m ago':s<86400?Math.floor(s/3600)+'h ago':Math.floor(s/86400)+'d ago'};
+
+function board(p,lim){const mx=p.n[0]?.votes||1;return p.n.slice(0,lim||99).map((x,i)=>`<div class="lb"><b class="mut">${i+1}</b><img class="th" src="${esc(x.img)}"><div><b>${esc(x.name)}</b><div class="bar"><i style="width:${Math.max(2,(x.votes||0)/mx*100)}%"></i></div></div><b>${num(x.votes)}</b></div>`).join('')}
+
+function poll(id){
+  const p=pl().find(x=>x.id===id);if(!p)return `<div class="wrap ctr mut">Poll not found. <a href="#/"><u>Back</u></a></div>`;
+  return `<div class="wrap"><a class="mut" href="#/">← All polls</a><div class="hand" style="margin-top:12px">${isOpen(p)?'open poll':'closed'}</div><h1>${esc(p.title)}</h1><p class="mut" style="margin:6px 0 14px">${esc(p.desc||'One token equals one vote. The order on this page is the live result.')}</p>
+  <div class="tabs" style="max-width:420px;margin-bottom:18px">${[['Votes',num(p.total)],['Nominees',p.n.length],['Leading',esc(p.n[0]?.name||'-')]].map(([a,b])=>`<div class="card"><small class="mut">${a}</small><div style="font-weight:800;font-size:16px">${b}</div></div>`).join('')}</div>
+  <div class="grid">${p.n.map((x,i)=>`<div class="nc"><span class="rk">${i+1}</span><img src="${esc(x.img)}"><div class="b"><b>${esc(x.name)}</b><div class="mut" style="font-size:11px">${num(x.votes)} votes</div><button class="btn sm" ${isOpen(p)?'':'disabled'} onclick="A.vote('${p.id}','${x.key}')">Vote · 1 ✦</button></div></div>`).join('')}</div>
+  <div class="card" style="margin-top:20px"><div class="row sp"><b>Live standings</b><span class="mut">${num(p.total)} votes</span></div>${board(p)}</div></div>`;
+}
+const standings=()=>`<div class="wrap"><div class="ctr"><div class="hand">standings</div><h1>Who is ahead</h1></div><div style="margin-top:20px;display:grid;gap:14px">${pl().map(p=>`<div class="card"><div class="row sp"><a href="#/poll/${p.id}"><b style="font-size:16px">${esc(p.title)}</b></a><span class="mut">${num(p.total)} votes</span></div>${board(p,5)}</div>`).join('')||'<p class="mut ctr">No polls yet.</p>'}</div></div>`;
+
+const FREE=[5,10,15,25,50],COOL={5:30,10:120,15:600,25:1800,50:3600},CL={5:'30 seconds',10:'2 minutes',15:'10 minutes',25:'30 minutes',50:'1 hour'},CAP=400;
+const cd=n=>Math.max(0,(S.me?.claims?.[n]||0)+COOL[n]*1000-Date.now());
+const fmt=ms=>{const t=Math.ceil(ms/1000),m=Math.floor(t/60);return m>=60?Math.floor(m/60)+'h '+m%60+'m':m?m+':'+String(t%60).padStart(2,'0'):t+'s'};
+const dayUsed=()=>S.me?.daily?.d===new Date().toISOString().slice(0,10)?S.me.daily.t:0;
+function tickTokens(){FREE.forEach(n=>{const b=document.getElementById('tg'+n),p=document.getElementById('tb'+n);if(!b)return;const r=cd(n);b.disabled=r>0;b.textContent=r>0?'Wait '+fmt(r):'Get';p.style.width=r>0?(100-r/(COOL[n]*10))+'%':'100%'})}
+setInterval(()=>{if(R()[0]==='tokens'&&S.me)tickTokens()},1000);
+const tokens=()=>`<div class="wrap"><div class="ctr"><div class="hand">wallet</div><h1>Tokens for<br>the next vote</h1><p class="mut" style="margin:10px auto 0;max-width:340px">Free tokens come from one ad. A purchase arrives after payment. One token is still one vote.</p>
+<div class="lime" style="margin:14px 0">one token, one vote.</div>
+<div class="seg p" style="display:inline-flex;margin-bottom:16px"><button class="${S.tk==='free'?'on':''}" onclick="A.tk('free')">Free Tokens</button><button class="${S.tk==='buy'?'on':''}" onclick="A.tk('buy')">Buy Tokens</button></div></div>
+${S.tk==='buy'?`<div class="card ctr" style="max-width:420px;margin:0 auto;padding:30px"><div class="hand">soon</div><b>Buying tokens isn't available yet.</b><p class="mut" style="margin-top:6px">Use Free Tokens for now.</p></div>`:`
+<p class="mut ctr" style="font-size:10px;max-width:420px;margin:0 auto 14px">Get opens one ad and adds the tokens immediately. Each amount then waits out its own cooldown. Free claims stop at ${CAP} tokens each UTC day (${Math.max(0,CAP-dayUsed())} left today).</p>
+<div class="tkg">${FREE.map((n,i)=>`<div class="card" style="grid-column:span ${i<2?3:2}"><div class="row sp"><span style="font-size:20px">✦</span><b style="color:var(--lime);font-size:20px">+${n}</b></div><b style="display:block;margin-top:8px">${n} tokens</b><small class="mut" style="display:block;margin:4px 0 8px">1 ad · ${CL[n]} cooldown</small><div class="bar" style="height:4px;margin:0"><i id="tb${n}" style="width:100%"></i></div><button class="btn" id="tg${n}" style="width:100%;margin-top:12px" onclick="A.claim(${n})">Get</button></div>`).join('')}</div>
+<div class="card row sp" style="max-width:760px;margin:14px auto 0"><div><b>Daily check-in</b><div class="mut" style="font-size:11px">+5 ✦ once per UTC day</div></div><button class="btn sm" onclick="A.checkin()">Claim</button></div>`}</div>`;
+
+function admin(){
+  if(!isAdmin())return `<div class="wrap ctr mut">Superadmin only.</div>`;
+  return `<div class="wrap"><div class="hand" style="color:#fbbf24">admin panel</div><h1>Manage polls</h1>
+  <form class="card adm" style="margin:16px 0" onsubmit="A.createPoll(event)"><b>Create new poll</b><label>Poll title</label><input class="in" name="t" required placeholder="Pinoy Big Brother Collab 3.0! Best Housemate?">
+  <label>Description (optional)</label><input class="in" name="d"><label>Nominees (one name per line, optional — add photos after)</label><textarea class="in" name="n" rows="4"></textarea>
+  <button class="btn" style="margin-top:12px">Publish poll</button></form>
+  ${pl().map(p=>`<div class="card adm" style="margin-bottom:14px"><div class="row sp"><b style="font-size:16px">${esc(p.title)}</b><div class="row"><button class="btn dk sm" onclick="A.toggle('${p.id}')">${isOpen(p)?'Close poll':'Reopen'}</button><button class="btn red sm" onclick="A.delPoll('${p.id}')">Delete</button></div></div><div class="hr"></div>
+  ${p.n.map(x=>`<div class="row sp" style="margin-bottom:8px"><div class="row"><img class="th" src="${esc(x.img)}"><b>${esc(x.name)}</b><span class="mut">${num(x.votes)}</span></div><div class="row"><label class="btn dk sm" style="margin:0;color:#fff;cursor:pointer">Change photo<input type="file" accept="image/*" hidden onchange="A.setImg('${p.id}','${x.key}',this)"></label><button class="btn red sm" onclick="A.delNom('${p.id}','${x.key}')">✕</button></div></div>`).join('')}
+  <form class="row" style="margin-top:10px;flex-wrap:wrap" onsubmit="A.addNom(event,'${p.id}')"><input class="in" name="n" required placeholder="New nominee name" style="flex:1;min-width:140px"><input type="file" name="f" accept="image/*" style="color:var(--mut);max-width:190px"><button class="btn sm">Add nominee</button></form></div>`).join('')}</div>`;
+}
+
+function render(){
+  top();const r=R(),n=S.user?(r[0]||'home'):(r[0]==='signup'?'signup':'login');
+  if(S.user&&!S.me){$('#app').innerHTML='<p class="ctr mut" style="margin:20vh">Loading…</p>';return}
+  const V={login:()=>auth_(0),signup:()=>auth_(1),home,post:()=>postv(r[1]),replays:()=>replays(r[1]),profile:()=>profile(r[1]),transactions:txs,settings:settings2,poll:()=>poll(r[1]),standings,tokens,admin};
+  $('#app').innerHTML=(V[n]||home)();if(n==='tokens')tickTokens();
+}
+const rerender=()=>{if(['admin','post','replays','settings','profile'].includes(R()[0])&&/INPUT|TEXTAREA/.test(document.activeElement?.tagName))return;render()};
+
+/* ---------- actions ---------- */
+const uref=p=>ref(db,`users/${S.user.uid}/${p}`);
+const log=(t,l)=>push(uref('tx'),{t,l,ts:Date.now()});
+const spend=async(n,l)=>{const ok=(await runTransaction(uref('tokens'),t=>(t||0)>=n?t-n:undefined)).committed;if(ok)log(-n,l);return ok};
+const add=async(n,l)=>{await runTransaction(uref('tokens'),t=>(t||0)+n);log(n,l)};
+const err=e=>toast(e.message?.replace('Firebase: ','')||'Something went wrong');
+const A=window.A={
+  async login(e){e.preventDefault();const f=e.target.elements;let id=f.id.value.trim();
+    try{if(!id.includes('@')){const s=await get(ref(db,'usernames/'+id.toLowerCase()));if(!s.exists())return toast('Username not found — use your email');id=s.val().email}
+    await signInWithEmailAndPassword(auth,id,f.p.value)}catch(x){err(x)}},
+  async signup(e){e.preventDefault();const f=e.target.elements,u=f.u.value.trim(),em=f.id.value.trim();
+    if(f.p.value!==f.p2.value)return toast('Passwords do not match');
+    try{S.pending=true;const k=u.toLowerCase();
+      if((await get(ref(db,'usernames/'+k))).exists()){S.pending=false;return toast('Username already taken')}
+      const c=await createUserWithEmailAndPassword(auth,em,f.p.value);
+      await set(ref(db,'users/'+c.user.uid),{username:u,email:em,tokens:START,role:'user',avatar:avatar(u),createdAt:Date.now()});
+      await set(ref(db,'usernames/'+k),{uid:c.user.uid,email:em});S.pending=false;bind(c.user);toast(`Welcome! ${START} tokens added`)}
+    catch(x){S.pending=false;err(x)}},
+  async social(k){try{const p=k==='google'?new GoogleAuthProvider():k==='facebook'?new FacebookAuthProvider():new OAuthProvider('apple.com');await signInWithPopup(auth,p)}catch(x){err(x)}},
+  async magic(){const em=prompt('Email for your magic link?');if(!em)return;try{await sendSignInLinkToEmail(auth,em,{url:location.origin+location.pathname,handleCodeInApp:true});localStorage.setItem('mlEmail',em);toast('Check your email for the link')}catch(x){err(x)}},
+  logout(){S.menuOn=false;signOut(auth)},
+  menu(e){e.stopPropagation();S.menuOn=!S.menuOn;$('#um').classList.toggle('on',S.menuOn)},
+  async addEp(e){e.preventDefault();if(!isAdmin())return;const f=e.target.elements,v=ytid(f.u.value);if(!v)return toast('Invalid YouTube link');
+    try{await push(ref(db,'episodes'),{title:f.t.value.trim(),ep:f.e.value.trim(),vid:v,createdAt:Date.now()});e.target.reset();toast('Replay added')}catch(x){err(x)}},
+  delEp(id){if(confirm('Remove this replay?'))remove(ref(db,'episodes/'+id)).catch(err)},
+  async saveProfile(){const dn=document.getElementById('sdn').value.trim(),un=document.getElementById('sun').value.trim(),m=S.me,upd={};
+    if(dn&&dn!==dname(m)){if(m.nameChangedAt&&Date.now()-m.nameChangedAt<6048e5)return toast('You can change your display name once every 7 days');upd.displayName=dn;upd.nameChangedAt=Date.now()}
+    if(un&&un!==m.username){if(!/^\w{3,20}$/.test(un))return toast('Username: 3–20 letters, numbers, underscores');const k=un.toLowerCase(),old=m.username.toLowerCase();
+      if(k!==old){if((await get(ref(db,'usernames/'+k))).exists())return toast('Username already taken');try{await set(ref(db,'usernames/'+k),{uid:S.user.uid,email:m.email});remove(ref(db,'usernames/'+old)).catch(()=>{})}catch(x){return err(x)}}upd.username=un}
+    if(!Object.keys(upd).length)return toast('Nothing to save');try{await update(ref(db,'users/'+S.user.uid),upd);toast('Profile saved')}catch(x){err(x)}},
+  async setPw(){const a=document.getElementById('pw1').value,b=document.getElementById('pw2').value;if(a!==b)return toast('Passwords do not match');if(!/^(?=.*[A-Za-z])(?=.*\d).{8,128}$/.test(a))return toast('8–128 characters with a letter and a number');
+    try{await linkWithCredential(auth.currentUser,EmailAuthProvider.credential(S.me.email,a));toast('Password set');render()}catch(x){err(x)}},
+  portraits(){$('#modal').innerHTML=`<div class="modal"><div class="card"><div class="row sp"><h2 style="margin:0">Select portrait</h2><button class="chip" onclick="A.closeModal()">✕</button></div><div class="soc4">${['Felix','Aneka','Jasper','Luna','Milo','Zoe','Oscar','Ruby'].map(x=>`<img class="av" style="width:100%;height:auto;aspect-ratio:1;cursor:pointer" src="${avatar(x)}" onclick="A.pickAv('${x}')">`).join('')}</div></div></div>`},
+  async pickAv(x){try{await update(ref(db,'users/'+S.user.uid),{avatar:avatar(x)});A.closeModal();toast('Portrait updated')}catch(e){err(e)}},
+  async setAvatar(i){if(!i.files[0])return;if(i.files[0].size>5e6)return toast('Image must be 5 MB or less');try{await update(ref(db,'users/'+S.user.uid),{avatar:await img2data(i.files[0])});toast('Profile photo updated')}catch(x){err(x)}},
+  async vote(pid,key){const p=S.polls[pid];if(!p||p.status==='closed')return toast('Poll is closed');
+    if(!await spend(1,'Vote · '+p.title))return toast('Not enough tokens — get more in Get Tokens');
+    await runTransaction(ref(db,`polls/${pid}/items/${key}/votes`),v=>(v||0)+1);runTransaction(uref('votesCast'),v=>(v||0)+1);toast('Vote counted! −1 ✦')},
+  openPost(){const P=pl();$('#modal').innerHTML=`<div class="modal"><div class="card"><div class="hand">stage</div><h2>New post</h2><p class="mut" style="margin-bottom:10px">Posting spends ${POST_COST} tokens.</p>
+  <textarea class="in" id="pc" rows="3" maxlength="180" placeholder="Say it in one line."></textarea>
+  <div class="tabs" style="margin:10px 0"><div class="card" id="pq" onclick="A.ptype('quote')"><span class="hand">quote</span><br><b>Stand alone</b></div><div class="card" id="pp" onclick="A.ptype('poll')"><span class="hand">poll</span><br><b>Tag a poll</b></div></div>
+  <select class="in" id="ps" onchange="A.fillItems()" style="display:none"><option value="">Pick a poll</option>${P.map(p=>`<option value="${p.id}">${esc(p.title)}</option>`).join('')}</select><select class="in" id="pi" style="display:none;margin-top:8px"></select>
+  <div class="row sp" style="margin-top:14px"><span class="pillb">${POST_COST} ✦</span><div class="row"><button class="btn dk" onclick="A.closeModal()">Close</button><button class="btn" onclick="A.post()">Post</button></div></div></div></div>`;A.ptype('quote')},
+  ptype(t){S.pt=t;$('#pq').style.borderColor=t==='quote'?'#a855f7':'';$('#pp').style.borderColor=t==='poll'?'#a855f7':'';$('#ps').style.display=t==='poll'?'block':'none';if(t!=='poll')$('#pi').style.display='none'},
+  fillItems(){const p=pl().find(x=>x.id===$('#ps').value),i=$('#pi');i.style.display=p?'block':'none';i.innerHTML=p?'<option value="">All items</option>'+p.n.map(x=>`<option value="${x.key}">${esc(x.name)}</option>`).join(''):''},
+  tab(t){S.tab=t;render()},
+  follow(u){const me=S.user.uid,on=S.me.following?.[u],P=[`users/${me}/following/${u}`,`following/${me}/${u}`,`followers/${u}/${me}`];Promise.all(P.map(x=>on?remove(ref(db,x)):set(ref(db,x),true))).catch(err)},
+  like(id){const r=ref(db,`posts/${id}/likes/${S.user.uid}`);(S.posts[id]?.likes?.[S.user.uid]?remove(r):set(r,true)).catch(err)},
+  vote2(id,d){const u=S.user.uid,p=S.posts[id]||{},a=ref(db,`posts/${id}/likes/${u}`),b=ref(db,`posts/${id}/downs/${u}`),up=d>0,on=up?p.likes?.[u]:p.downs?.[u],ops=[on?remove(up?a:b):set(up?a:b,true)];if(!on)ops.push(remove(up?b:a));Promise.all(ops).catch(err)},
+  async comment(id){const t=document.getElementById('cm').value.trim();if(!t)return toast('Write a comment first');
+    try{await push(ref(db,`posts/${id}/comments`),{uid:S.user.uid,username:dname(S.me),avatar:S.me.avatar,text:t,timestamp:Date.now()});document.getElementById('cm').value=''}catch(x){err(x)}},
+  async copy(t){try{await navigator.clipboard.writeText(t);toast('Link copied')}catch{prompt('Copy link',t)}},
+  qr(u){document.getElementById('qr').innerHTML=`<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${u}" style="border-radius:12px;margin-top:12px">`},
+  share(id){const p=S.posts[id];if(!p)return;const raw=location.origin+location.pathname+'#/post/'+id,u=encodeURIComponent(raw),t=encodeURIComponent(p.content);
+    const L=[['QR','qr'],['X','https://twitter.com/intent/tweet?url='+u+'&text='+t],['Facebook','https://www.facebook.com/sharer/sharer.php?u='+u],['WhatsApp','https://wa.me/?text='+t+'%20'+u],['Telegram','https://t.me/share/url?url='+u+'&text='+t],['Messenger','fb-messenger://share/?link='+u],['Email','mailto:?subject='+t+'&body='+u],['Copy','copy']];
+    $('#modal').innerHTML=`<div class="modal"><div class="card" style="max-width:420px"><div class="row sp"><div><div class="hand">share</div><h2 style="margin:0">Share this post</h2></div><button class="chip" onclick="A.closeModal()">✕</button></div><p class="mut" style="margin:8px 0">“${esc(p.content)}”</p>
+    <div class="row" style="background:var(--in);border-radius:14px;padding:6px 6px 6px 12px"><span class="mut" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(raw)}</span><button class="btn sm" onclick="A.copy('${esc(raw)}')">Copy</button></div>
+    <div class="soc4">${L.map(([n,h])=>h==='qr'?`<button class="btn dk" onclick="A.qr('${u}')">${n}</button>`:h==='copy'?`<button class="btn dk" onclick="A.copy('${esc(raw)}')">${n}</button>`:`<a class="btn dk" style="text-align:center" target="_blank" rel="noopener" href="${h}">${n}</a>`).join('')}</div><div id="qr" class="ctr"></div></div></div>`},
+  closeModal(){$('#modal').innerHTML=''},
+  async post(){const c=$('#pc').value.trim(),pid=S.pt==='poll'?$('#ps').value:'';if(!c)return toast('Write something first');if(S.pt==='poll'&&!pid)return toast('Pick a poll');
+    if(!await spend(POST_COST,'New post'))return toast(`You need ${POST_COST} tokens`);
+    await push(ref(db,'posts'),{uid:S.user.uid,username:dname(S.me),avatar:S.me.avatar,content:c,type:S.pt,pollId:pid,itemKey:pid?$('#pi').value:'',timestamp:Date.now()});A.closeModal();toast('Posted')},
+  tk(t){S.tk=t;render()},
+  async claim(n){if(cd(n)>0)return;const d=new Date().toISOString().slice(0,10),used=dayUsed();if(used+n>CAP)return toast(`Daily free limit reached (${CAP} tokens)`);
+    window.open(ADS_URL,'_blank');
+    try{await update(ref(db,'users/'+S.user.uid),{['claims/'+n]:Date.now(),daily:{d,t:used+n}});await add(n,'Free tokens');toast(`+${n} tokens`)}catch(x){err(x)}},
+  async checkin(){const d=new Date().toISOString().slice(0,10);if(S.me.lastCheckin===d)return toast('Already claimed today');await update(ref(db,'users/'+S.user.uid),{lastCheckin:d});await add(5,'Daily check-in');toast('+5 tokens')},
+  /* admin only (also enforced by database rules) */
+  async createPoll(e){e.preventDefault();if(!isAdmin())return;const f=e.target.elements,items={};
+    f.n.value.split('\n').map(s=>s.trim()).filter(Boolean).forEach((n,i)=>items['n'+Date.now()+i]={name:n,votes:0,img:avatar(n)});
+    try{await push(ref(db,'polls'),{title:f.t.value.trim(),desc:f.d.value.trim(),status:'open',items,createdAt:Date.now()});e.target.reset();toast('Poll published')}catch(x){err(x)}},
+  async addNom(e,pid){e.preventDefault();if(!isAdmin())return;const f=e.target.elements,n=f.n.value.trim();const img=f.f.files[0]?await img2data(f.f.files[0]):avatar(n);
+    try{await push(ref(db,`polls/${pid}/items`),{name:n,votes:0,img});e.target.reset();toast('Nominee added')}catch(x){err(x)}},
+  async setImg(pid,key,inp){if(!inp.files[0])return;try{await set(ref(db,`polls/${pid}/items/${key}/img`),await img2data(inp.files[0]));toast('Photo updated')}catch(x){err(x)}},
+  async delNom(pid,key){if(confirm('Remove nominee?'))remove(ref(db,`polls/${pid}/items/${key}`)).catch(err)},
+  toggle(pid){update(ref(db,'polls/'+pid),{status:S.polls[pid].status==='closed'?'open':'closed'}).catch(err)},
+  delPoll(pid){if(confirm('Delete this poll and all votes?'))remove(ref(db,'polls/'+pid)).catch(err)}
+};
+
+/* ---------- boot ---------- */
+async function bind(u){
+  S.user=u;if(S.off)S.off();
+  const r=ref(db,'users/'+u.uid);
+  if(!(await get(r)).exists()&&!S.pending){const n=(u.displayName||u.email.split('@')[0]).slice(0,20);
+    await set(r,{username:n,email:u.email,tokens:START,role:'user',avatar:u.photoURL||avatar(n),createdAt:Date.now()});
+    await set(ref(db,'usernames/'+n.toLowerCase()),{uid:u.uid,email:u.email}).catch(()=>{})}
+  S.off=onValue(r,s=>{S.me=s.val();if(S.me&&['login','signup',''].includes(R()[0]))location.hash='#/';render()});
+}
+onAuthStateChanged(auth,u=>{if(u){if(!S.pending)bind(u)}else{S.user=S.me=null;if(S.off)S.off();render()}});
+onValue(ref(db,'polls'),s=>{S.polls=s.val()||{};rerender()});
+onValue(ref(db,'followers'),s=>{S.flw=s.val()||{};if(R()[0]==='profile')rerender()});
+onValue(ref(db,'following'),s=>{S.fng=s.val()||{};if(R()[0]==='profile')rerender()});
+onValue(ref(db,'episodes'),s=>{S.eps=s.val()||{};if(R()[0]==='replays')rerender()});
+onValue(ref(db,'posts'),s=>{S.posts=s.val()||{};if(['home','post'].includes(R()[0]||'home'))rerender()});
+addEventListener('hashchange',render);
+addEventListener('click',e=>{if(S.menuOn&&(!e.target.closest('#um')||e.target.closest('#um a,#um .mi'))){S.menuOn=false;$('#um')?.classList.remove('on')}});
+if(isSignInWithEmailLink(auth,location.href)){const em=localStorage.getItem('mlEmail')||prompt('Confirm your email');signInWithEmailLink(auth,em,location.href).then(()=>history.replaceState(null,'',location.pathname)).catch(err)}
+render();
+</script></body></html>
