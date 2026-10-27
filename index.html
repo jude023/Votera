@@ -66,6 +66,8 @@ const $=s=>document.querySelector(s),num=n=>(n||0).toLocaleString();
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const avatar=n=>`https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(n)}`;
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600)};
+const ADS={pop:'https://pl32046199.profitableratecpmnetwork.com/b4/a6/aa/b4a6aa94e4a87adaae3a6858f9230478.js',bar:'https://pl32046200.profitableratecpmnetwork.com/96/71/ff/9671ff9f3462e713abbb885a34851cc3.js'};
+const loadAd=u=>{if(document.querySelector(`script[src="${u}"]`))return;const e=document.createElement('script');e.src=u;e.async=true;document.body.appendChild(e)};
 const dname=u=>u.displayName||u.username;
 const isAdmin=()=>S.me?.role==='superadmin';
 const R=()=>location.hash.slice(2).split('/');
@@ -211,7 +213,7 @@ function render(){
   top();const r=R(),n=S.user?(r[0]||'home'):(r[0]==='signup'?'signup':'login');
   if(S.user&&!S.me){$('#app').innerHTML='<p class="ctr mut" style="margin:20vh">Loading…</p>';return}
   const V={login:()=>auth_(0),signup:()=>auth_(1),home,post:()=>postv(r[1]),replays:()=>replays(r[1]),profile:()=>profile(r[1]),transactions:txs,settings:settings2,poll:()=>poll(r[1]),standings,tokens,admin};
-  $('#app').innerHTML=(V[n]||home)();if(n==='tokens')tickTokens();
+  $('#app').innerHTML=(V[n]||home)();if(n==='tokens'){loadAd(ADS.pop);loadAd(ADS.bar);tickTokens()}
 }
 const rerender=()=>{if(['admin','post','replays','settings','profile'].includes(R()[0])&&/INPUT|TEXTAREA/.test(document.activeElement?.tagName))return;render()};
 
@@ -279,7 +281,6 @@ const A=window.A={
     await push(ref(db,'posts'),{uid:S.user.uid,username:dname(S.me),avatar:S.me.avatar,content:c,type:S.pt,pollId:pid,itemKey:pid?$('#pi').value:'',timestamp:Date.now()});A.closeModal();toast('Posted')},
   tk(t){S.tk=t;render()},
   async claim(n){if(cd(n)>0)return;const d=new Date().toISOString().slice(0,10),used=dayUsed();if(used+n>CAP)return toast(`Daily free limit reached (${CAP} tokens)`);
-    window.open(ADS_URL,'_blank');
     try{await update(ref(db,'users/'+S.user.uid),{['claims/'+n]:Date.now(),daily:{d,t:used+n}});await add(n,'Free tokens');toast(`+${n} tokens`)}catch(x){err(x)}},
   async checkin(){const d=new Date().toISOString().slice(0,10);if(S.me.lastCheckin===d)return toast('Already claimed today');await update(ref(db,'users/'+S.user.uid),{lastCheckin:d});await add(5,'Daily check-in');toast('+5 tokens')},
   /* admin only (also enforced by database rules) */
