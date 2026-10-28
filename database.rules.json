@@ -25,6 +25,10 @@
     },
     "followers": { ".read": true, "$t": { "$u": { ".write": "auth != null && auth.uid == $u" } } },
     "following": { ".read": true, "$u": { "$t": { ".write": "auth != null && auth.uid == $u" } } },
+    "settings": {
+      ".read": true,
+      "stream": { ".write": "auth != null && root.child('users/' + auth.uid + '/role').val() == 'superadmin'" }
+    },
     "episodes": {
       ".read": true,
       "$e": { ".write": "auth != null && root.child('users/' + auth.uid + '/role').val() == 'superadmin'" }

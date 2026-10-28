@@ -46,7 +46,7 @@ h2{font-size:20px;font-weight:800;margin-bottom:10px}.mut{color:var(--mut)}.hand
 .adm{border-color:#f59e0b66}.hr{border-top:1px solid var(--line);margin:12px 0}
 .st{margin-left:-8px;width:26px;height:26px}.fl{color:#c084fc;font-size:11px;cursor:pointer;margin-left:4px}
 .emb{display:block;border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#0a0a16}.mini{display:flex;gap:10px;align-items:center;margin-top:8px}.mini img{width:80px;aspect-ratio:3/4;object-fit:cover;border-radius:10px}
-.chip{background:var(--in);border:0;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:700}.soc4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.soc4 .btn{padding:14px 4px;font-size:11px}.vt{display:inline-flex;align-items:center;gap:6px;margin-right:6px}a.chip{display:inline-block}.chip.dn{background:#be185d}.um{position:absolute;right:0;top:42px;width:250px;background:#12121e;border:1px solid var(--line);border-radius:18px;padding:10px;display:none;z-index:40;box-shadow:0 20px 50px #000a}.um.on{display:block}.um>a,.um .mi{display:block;width:100%;text-align:left;background:none;border:0;padding:9px 8px;border-radius:10px;color:#ddd;font-size:12px;font-weight:600}.um>a:hover,.um .mi:hover{background:#1f1f2e}.vid{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000}.vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.seg.p button.on{background:var(--g);color:#fff}.seg.p button{padding:9px 22px}.tkg{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;max-width:760px;margin:0 auto}@media(max-width:700px){.tkg{grid-template-columns:1fr}.tkg>div{grid-column:auto!important}}.chip.on{background:#7c3aed}.chip+.chip{margin-left:6px}
+.chip{background:var(--in);border:0;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:700}.soc4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.soc4 .btn{padding:14px 4px;font-size:11px}.vt{display:inline-flex;align-items:center;gap:6px;margin-right:6px}a.chip{display:inline-block}.chip.dn{background:#be185d}.um{position:absolute;right:0;top:42px;width:250px;background:#12121e;border:1px solid var(--line);border-radius:18px;padding:10px;display:none;z-index:40;box-shadow:0 20px 50px #000a}.um.on{display:block}.um>a,.um .mi{display:block;width:100%;text-align:left;background:none;border:0;padding:9px 8px;border-radius:10px;color:#ddd;font-size:12px;font-weight:600}.um>a:hover,.um .mi:hover{background:#1f1f2e}.vid{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000}.vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.seg.p button.on{background:var(--g);color:#fff}.seg.p button{padding:9px 22px}.tkg{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;max-width:760px;margin:0 auto}@media(max-width:700px){.tkg{grid-template-columns:1fr}.tkg>div{grid-column:auto!important}}.livep{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:5px 12px;font-size:11px;font-weight:800;background:#2a2a3a;color:var(--mut)}.livep.on{background:#7f1d1d;color:#fecaca}.livep i{width:7px;height:7px;border-radius:50%;background:currentColor}.livep.on i{animation:bl 1.2s infinite}@keyframes bl{50%{opacity:.2}}.sg{display:grid;grid-template-columns:1fr 340px;gap:14px}.sg iframe.ch{width:100%;height:100%;min-height:420px;border:0;border-radius:16px;background:var(--card)}@media(max-width:900px){.sg{grid-template-columns:1fr}.sg iframe.ch{min-height:420px}}.chip.on{background:#7c3aed}.chip+.chip{margin-left:6px}
 .seg{display:flex;background:var(--card);border-radius:999px;padding:3px}.seg button{border:0;background:none;padding:6px 14px;border-radius:999px;font-weight:700;font-size:11px;color:var(--mut)}.seg button.on{background:var(--lime);color:#000}
 .wrap.wide{max-width:1320px}.wide .cols{grid-template-columns:1fr minmax(0,480px) 1fr}.wide aside{max-width:300px;margin-left:auto;width:100%}
 @media(max-width:800px){.wide .cols{grid-template-columns:1fr}.wide .cols>div:empty{display:none}.wide aside{max-width:none}.cols{grid-template-columns:1fr}nav a{padding:6px 8px}}
@@ -61,13 +61,14 @@ import {getDatabase,ref,get,set,update,push,remove,onValue,runTransaction} from 
 const app=initializeApp({apiKey:"AIzaSyAwJ1Pjw7RlIVxGpFqvbbQ8nsuh4jn6ndg",authDomain:"pbb-voting.firebaseapp.com",databaseURL:"https://pbb-voting-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"pbb-voting",storageBucket:"pbb-voting.firebasestorage.app",messagingSenderId:"974959562984",appId:"1:974959562984:web:347e1c85518ebaecfd395d"});
 const auth=getAuth(app),db=getDatabase(app);
 const START=200,POST_COST=5,ADS_URL='https://beta.publishers.adsterra.com/websites',CONTACT='mailto:malainejude123@gmail.com';
-const S={user:null,me:null,polls:{},posts:{},pt:'quote',pending:false,off:null,tab:'for',menuOn:false,tk:'free',eps:{},flw:{},fng:{}};
+const S={user:null,me:null,polls:{},posts:{},pt:'quote',pending:false,off:null,tab:'for',menuOn:false,tk:'free',str:null,live:null,lk:'',lp:0,eps:{},flw:{},fng:{}};
 const $=s=>document.querySelector(s),num=n=>(n||0).toLocaleString();
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const avatar=n=>`https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(n)}`;
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600)};
 const ADS={pop:'https://pl32046199.profitableratecpmnetwork.com/b4/a6/aa/b4a6aa94e4a87adaae3a6858f9230478.js',bar:'https://pl32046200.profitableratecpmnetwork.com/96/71/ff/9671ff9f3462e713abbb885a34851cc3.js'};
 const loadAd=u=>{if(document.querySelector(`script[src="${u}"]`))return;const e=document.createElement('script');e.src=u;e.async=true;document.body.appendChild(e)};
+const STREAM_CH='@PBBabscbn';
 const dname=u=>u.displayName||u.username;
 const isAdmin=()=>S.me?.role==='superadmin';
 const R=()=>location.hash.slice(2).split('/');
@@ -83,7 +84,7 @@ const img2data=f=>new Promise(res=>{const i=new Image();i.onload=()=>{const s=Ma
 function top(){
   const r=R()[0]||'home',L=(h,t)=>`<a href="#/${h}" class="${r===h?'on':''}">${t}</a>`;
   $('#top').innerHTML=`<a href="#/" class="logo">${star} Votera</a>`+(S.user&&S.me?`
-  <nav>${L('','Community Posts').replace('class=""','class="'+(r==='home'||r===''?'on':'')+'"')}${L('tokens','Get Tokens')}${L('standings','Standings')}${L('replays','Replays')}${isAdmin()?L('admin','Admin'):''}</nav>
+  <nav>${L('','Community Posts').replace('class=""','class="'+(r==='home'||r===''?'on':'')+'"')}${L('tokens','Get Tokens')}${L('standings','Standings')}${L('replays','Replays')}${L('streaming','Streaming')}${isAdmin()?L('admin','Admin'):''}</nav>
   <div class="r"><button class="btn sm" onclick="A.openPost()">+ Post</button><span class="pillb">${num(S.me.tokens)} ✦</span>
   <div style="position:relative"><img class="av" src="${esc(S.me.avatar)}" onclick="A.menu(event)" style="cursor:pointer">
   <div id="um" class="um ${S.menuOn?'on':''}"><a href="#/profile" class="row" style="padding:6px"><img class="av" style="width:38px;height:38px" src="${esc(S.me.avatar)}"><div><b>${esc(dname(S.me))}</b><div class="mut" style="font-size:11px">View profile</div></div></a>
@@ -140,6 +141,21 @@ function replays(id){
   const player=cur?`<a class="mut" href="#/replays">‹ All replays</a><div class="vid" style="margin:12px 0"><iframe src="https://www.youtube-nocookie.com/embed/${esc(cur.vid)}?rel=0" allow="accelerometer;autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="hand">${esc(cur.ep||'replay')}</div><h1 style="font-size:24px;margin-bottom:22px">${esc(cur.title)}</h1><h2>More episodes</h2>`:`<div class="ctr"><div class="hand">watch again</div><h1>Episode replays</h1></div>`;
   if(id&&!cur)return `<div class="wrap ctr mut">Replay not found. <a href="#/replays"><u>Back</u></a></div>`;
   return `<div class="wrap wide">${player}${form}<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr));margin-top:16px">${E.filter(e=>e.id!==id).map(card).join('')||'<p class="mut">No replays yet.</p>'}</div></div>`}
+function streaming(){
+  const st=S.str||{},ad=isAdmin(),L=S.live||{},m=st.manual,live=m||L.live,vid=m||L.videoId,ch=st.channelId||STREAM_CH,fb=!live&&L.error&&/^UC/.test(ch);
+  const form=ad?`<form class="card adm" style="margin:14px 0" onsubmit="A.saveStream(event)"><b>Stream settings</b><label>YouTube channel (optional — default is ${STREAM_CH})</label><input class="in" name="c" value="${esc(st.channelId||'')}" placeholder="@handle or UCxxxxxxxxxxxxxxxxxxxxxx"><label>Force a specific live video (optional — overrides auto-detect)</label><input class="in" name="m" placeholder="https://www.youtube.com/watch?v=..." value="${st.manual?'https://youtu.be/'+esc(st.manual):''}"><button class="btn" style="margin-top:12px">Save</button></form>`:'';
+  const pill=`<span class="livep ${live?'on':''}"><i></i>${live?'LIVE NOW':'OFFLINE'}</span>`;
+  let body;
+  if(live)body=`<div class="sg"><div><div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${esc(vid)}?autoplay=1&rel=0" allow="accelerometer;autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>${L.title&&!m?`<h2 style="margin-top:12px">${esc(L.title)}</h2>`:''}</div><iframe class="ch" src="https://www.youtube.com/live_chat?v=${esc(vid)}&embed_domain=${location.hostname}"></iframe></div>`;
+  else if(fb)body=`<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=${esc(ch)}&autoplay=1" allow="autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen></iframe></div><p class="mut ctr" style="margin-top:8px;font-size:11px">Couldn't check live status, showing YouTube's live player instead.</p>`;
+  else if(L.error)body=`<div class="card ctr" style="padding:40px"><b>Couldn't check the live status.</b><p class="mut" style="margin:6px 0 14px">Try again in a minute, or open the channel on YouTube.</p><a class="btn sm" target="_blank" rel="noopener" href="https://www.youtube.com/${esc(ch)}/live">Open on YouTube</a></div>`;
+  else body=`<div class="card ctr" style="padding:40px"><div class="hand">not live right now</div><b style="font-size:16px">No live stream at the moment.</b><p class="mut" style="margin:6px 0 14px">This page checks every minute and starts the stream by itself when it goes live.</p><a class="btn sm" href="#/replays">Watch replays</a></div>`;
+  return `<div class="wrap wide"><div class="ctr" style="margin-bottom:16px"><div class="hand">watch live</div><h1>Live stream</h1><div style="margin-top:10px">${pill}</div></div>${form}${body}</div>`}
+async function pollLive(force){
+  const c=S.str?.channelId||STREAM_CH;if(S.str?.manual||R()[0]!=='streaming'||(!force&&Date.now()-S.lp<30000))return;S.lp=Date.now();
+  let j;try{j=await (await fetch('/api/live?channel='+encodeURIComponent(c))).json()}catch{j={error:true}}
+  const k=JSON.stringify([j.live,j.videoId,!!j.error]);if(k!==S.lk){S.lk=k;S.live=j;rerender()}}
+setInterval(()=>pollLive(),60000);
 function postv(id){
   const p=S.posts[id];if(!p)return `<div class="wrap ctr mut">Post not found. <a href="#/"><u>Back</u></a></div>`;
   const cs=Object.entries(p.comments||{}).map(([k,c])=>({...c,k})).sort((a,b)=>a.timestamp-b.timestamp);
@@ -212,10 +228,10 @@ function admin(){
 function render(){
   top();const r=R(),n=S.user?(r[0]||'home'):(r[0]==='signup'?'signup':'login');
   if(S.user&&!S.me){$('#app').innerHTML='<p class="ctr mut" style="margin:20vh">Loading…</p>';return}
-  const V={login:()=>auth_(0),signup:()=>auth_(1),home,post:()=>postv(r[1]),replays:()=>replays(r[1]),profile:()=>profile(r[1]),transactions:txs,settings:settings2,poll:()=>poll(r[1]),standings,tokens,admin};
-  $('#app').innerHTML=(V[n]||home)();if(n==='tokens'){loadAd(ADS.pop);loadAd(ADS.bar);tickTokens()}
+  const V={login:()=>auth_(0),signup:()=>auth_(1),home,post:()=>postv(r[1]),streaming,replays:()=>replays(r[1]),profile:()=>profile(r[1]),transactions:txs,settings:settings2,poll:()=>poll(r[1]),standings,tokens,admin};
+  $('#app').innerHTML=(V[n]||home)();if(n==='streaming')pollLive();if(n==='tokens'){loadAd(ADS.pop);loadAd(ADS.bar);tickTokens()}
 }
-const rerender=()=>{if(['admin','post','replays','settings','profile'].includes(R()[0])&&/INPUT|TEXTAREA/.test(document.activeElement?.tagName))return;render()};
+const rerender=()=>{if(['admin','post','replays','settings','profile','streaming'].includes(R()[0])&&/INPUT|TEXTAREA/.test(document.activeElement?.tagName))return;render()};
 
 /* ---------- actions ---------- */
 const uref=p=>ref(db,`users/${S.user.uid}/${p}`);
@@ -251,6 +267,9 @@ const A=window.A={
     try{await linkWithCredential(auth.currentUser,EmailAuthProvider.credential(S.me.email,a));toast('Password set');render()}catch(x){err(x)}},
   portraits(){$('#modal').innerHTML=`<div class="modal"><div class="card"><div class="row sp"><h2 style="margin:0">Select portrait</h2><button class="chip" onclick="A.closeModal()">✕</button></div><div class="soc4">${['Felix','Aneka','Jasper','Luna','Milo','Zoe','Oscar','Ruby'].map(x=>`<img class="av" style="width:100%;height:auto;aspect-ratio:1;cursor:pointer" src="${avatar(x)}" onclick="A.pickAv('${x}')">`).join('')}</div></div></div>`},
   async pickAv(x){try{await update(ref(db,'users/'+S.user.uid),{avatar:avatar(x)});A.closeModal();toast('Portrait updated')}catch(e){err(e)}},
+  async saveStream(e){e.preventDefault();if(!isAdmin())return;const f=e.target.elements,c=(f.c.value.match(/UC[\w-]{22}|@[\w.-]{3,30}/)||[''])[0],m=f.m.value.trim()?ytid(f.m.value):'';
+    if(f.c.value.trim()&&!c)return toast('Use @handle or a channel ID (UC…)');if(f.m.value.trim()&&!m)return toast('Invalid YouTube link');
+    try{await set(ref(db,'settings/stream'),{channelId:c,manual:m});S.lk='';pollLive(true);toast('Saved')}catch(x){err(x)}},
   async setAvatar(i){if(!i.files[0])return;if(i.files[0].size>5e6)return toast('Image must be 5 MB or less');try{await update(ref(db,'users/'+S.user.uid),{avatar:await img2data(i.files[0])});toast('Profile photo updated')}catch(x){err(x)}},
   async vote(pid,key){const p=S.polls[pid];if(!p||p.status==='closed')return toast('Poll is closed');
     if(!await spend(1,'Vote · '+p.title))return toast('Not enough tokens — get more in Get Tokens');
@@ -308,6 +327,7 @@ onAuthStateChanged(auth,u=>{if(u){if(!S.pending)bind(u)}else{S.user=S.me=null;if
 onValue(ref(db,'polls'),s=>{S.polls=s.val()||{};rerender()});
 onValue(ref(db,'followers'),s=>{S.flw=s.val()||{};if(R()[0]==='profile')rerender()});
 onValue(ref(db,'following'),s=>{S.fng=s.val()||{};if(R()[0]==='profile')rerender()});
+onValue(ref(db,'settings/stream'),s=>{S.str=s.val();S.lk='';if(R()[0]==='streaming'){pollLive(true);rerender()}});
 onValue(ref(db,'episodes'),s=>{S.eps=s.val()||{};if(R()[0]==='replays')rerender()});
 onValue(ref(db,'posts'),s=>{S.posts=s.val()||{};if(['home','post'].includes(R()[0]||'home'))rerender()});
 addEventListener('hashchange',render);
